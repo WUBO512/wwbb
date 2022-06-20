@@ -14,4 +14,6 @@ docker状态
 停止一个容器
 ![JS](https://github.com/WUBO512/wwbb/blob/main/%E5%AE%9E%E9%AA%8C%E6%88%AA%E5%9B%BE/6.png)   
 ![JS](https://github.com/WUBO512/wwbb/blob/main/%E5%AE%9E%E9%AA%8C%E6%88%AA%E5%9B%BE/7.png) 
+删除一个容器
+![JS](https://github.com/WUBO512/wwbb/blob/main/%E5%AE%9E%E9%AA%8C%E6%88%AA%E5%9B%BE/8.png) 
 
