@@ -16,7 +16,6 @@ sestatus
 #6.确认自防火墙状态，并设置为"引导启动"  
 service iptables status # 查看防火墙状态
 chkconfigtables on #设置防火墙ip自启  
-
 #7.建立用户QT,并指定用户uid为0，且用户组为QT  
 groupadd QT # 创建QT组
 useradd QT -g QT # 创建QT用户并添加到QT组
@@ -54,7 +53,67 @@ sed -n 7,10p test
 ![kali](https://github.com/WUBO512/wwbb/blob/main/%E5%AE%9E%E9%AA%8C%E6%88%AA%E5%9B%BEday2/18.png)  
 ![kali](https://github.com/WUBO512/wwbb/blob/main/%E5%AE%9E%E9%AA%8C%E6%88%AA%E5%9B%BEday2/19.png)  
 ![kali](https://github.com/WUBO512/wwbb/blob/main/%E5%AE%9E%E9%AA%8C%E6%88%AA%E5%9B%BEday2/20.png)  
-#20.  
+#20.查看系统的进程，并找出与ssh相关的内容，结束除/usr/sbin/sshd外所有ssh进程，并确认是通过服务器端断开的访问连接.(使用一行命令)  
+![kali](https://github.com/WUBO512/wwbb/blob/main/%E5%AE%9E%E9%AA%8C%E6%88%AA%E5%9B%BEday2/21.png)  
+ps -ef | grep ssh & kill  1030 583  3043 3102  
+#21.在系统中另建立一个名为farm1的用户,使其拥有sudo权限  
+![kali](https://github.com/WUBO512/wwbb/blob/main/%E5%AE%9E%E9%AA%8C%E6%88%AA%E5%9B%BEday2/22.png)  
+![kali](https://github.com/WUBO512/wwbb/blob/main/%E5%AE%9E%E9%AA%8C%E6%88%AA%E5%9B%BEday2/23.png)  
+#22.切换至farm1用户  
+![kali](https://github.com/WUBO512/wwbb/blob/main/%E5%AE%9E%E9%AA%8C%E6%88%AA%E5%9B%BEday2/24.png)  
+23.将farm文件夹中所有文件的属主改为farm1，属组改为QT1  
+![kali](https://github.com/WUBO512/wwbb/blob/main/%E5%AE%9E%E9%AA%8C%E6%88%AA%E5%9B%BEday2/25.png)  
+24.查找系统中名字以pass字段开头的文件(多种方式)   
+find / -name "pass*"  
+![kali](https://github.com/WUBO512/wwbb/blob/main/%E5%AE%9E%E9%AA%8C%E6%88%AA%E5%9B%BEday2/26.png)  
+25.查找/var目录中的文件，且过去一天内被修改过权限  
+find /var -ctime 1  
+![kali](https://github.com/WUBO512/wwbb/blob/main/%E5%AE%9E%E9%AA%8C%E6%88%AA%E5%9B%BEday2/27.png)  
+26.查找/etc目录中，文件包含password内容的文件 (多种方式)  
+![kali](https://github.com/WUBO512/wwbb/blob/main/%E5%AE%9E%E9%AA%8C%E6%88%AA%E5%9B%BEday2/28.png)  
+find / -name "*.*" | xargs grep "password" # 指定目录为 / 后，*.* 为匹配所有文件，xargs 命令是为了方便处理过长数据  
+27.使用一行命令提取主机中的所有可登录用户，并按照字母正常顺序排序，结果保存至家目录中的user.txt中  
+cat /etc/passwd | grep -E 'bin/csh|bin/bash' > a.txt && sort a.txt > user.txt  
+![kali](https://github.com/WUBO512/wwbb/blob/main/%E5%AE%9E%E9%AA%8C%E6%88%AA%E5%9B%BEday2/29.png)  
+28.查找主机中所有uid为0的用户  
+![kali](https://github.com/WUBO512/wwbb/blob/main/%E5%AE%9E%E9%AA%8C%E6%88%AA%E5%9B%BEday2/30.png)  
+29.将test文件中的所有:替换为+  
+vim test #打开文件  
+%s/:/+/g  #替换文中所有：为+  
+30.切割测试文件保存为每5个行为一个文件  
+split -l 5 test test -d  
+31.安装名为nginx的服务，并启动该服务  
+wget http://nginx.org/download/nginx-1.16.1.tar.gz  //下载  
+tar -xvf nginx-1.16.1.tar.gz -C /opt/  //解压  
+./configure --prefix=/opt/nginx --without-http_rewrite_module   //设置编译路径  
+make && make install  //编译  
+![kali](https://github.com/WUBO512/wwbb/blob/main/%E5%AE%9E%E9%AA%8C%E6%88%AA%E5%9B%BEday2/31.png)  
+![kali](https://github.com/WUBO512/wwbb/blob/main/%E5%AE%9E%E9%AA%8C%E6%88%AA%E5%9B%BEday2/32.png)  
+32.配置一个计划任务，用户root，每隔5小时的第46分钟执行命令echo hello >/root/hello.txt  
+46*/5***root echo hello >/root/hello.txt  # */5表示每隔5小时 46表示每小时的第46分钟  ***表示每天  
+33.在文件/etc/passwd中查找所有包含字符串oo或者ai的行。将找出的行按照原文的先后顺序拷贝到/root/cc文件中  
+cat /etc/passwd | grep -E 'oo|ai' > /root/cc  
+![kali](https://github.com/WUBO512/wwbb/blob/main/%E5%AE%9E%E9%AA%8C%E6%88%AA%E5%9B%BEday2/33.png)  
+34.删除掉/var/log/audit/audit.log,然后数据恢复到/opt中  
+lsof | grep /var/log/audit/audit.log  
+cp /proc/585/fd/5 /opt/audit.log  
+ll /opt/audit.log  
+35.查看服务名为Nginx所对应的进程id，再通过查询到的该id查找该进程打开的文件  
+ps -ef | grep 'nginx'  #进程后显示的文件路径即为该进程打开的文件  
+36.查看网络连接状态，并提取出来源IP以及PID号（一行命令）  
+![kali](https://github.com/WUBO512/wwbb/blob/main/%E5%AE%9E%E9%AA%8C%E6%88%AA%E5%9B%BEday2/34.png)  
+##实战能力  
+cat test | cut -d "/" -f 3-4 > wubo.txt && sed 's/$/\/login.action /g' wubo.txt > wuwu.txt  
+![kali](https://github.com/WUBO512/wwbb/blob/main/%E5%AE%9E%E9%AA%8C%E6%88%AA%E5%9B%BEday2/35.png)  
+
+
+
+
+
+
+
+
+  
     
 
   
