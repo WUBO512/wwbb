@@ -25,6 +25,8 @@ wordpress.qt.com ----> wordpress博客
 wordpress.qt.com 能到达wordpress博客  
 
 3.拓扑图  
+![kali](https://github.com/WUBO512/wwbb/blob/main/%E7%AC%AC%E5%9B%9B%E5%A4%A9/%E5%AE%9E%E9%AA%8C%E6%88%AA%E5%9B%BE/1.png)  
+  
   
 
   
